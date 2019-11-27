@@ -1,12 +1,9 @@
 from datetime import datetime
 
-import pickledb
 import spotipy
 import spotipy.util as util
 
 from keys import SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, USERNAME
-
-db = pickledb.load('tmp.db', False)
 
 scope = 'user-library-read playlist-modify-private playlist-read-private'
 token = util.prompt_for_user_token(USERNAME, scope, client_id=SPOTIPY_CLIENT_ID,
@@ -14,30 +11,26 @@ token = util.prompt_for_user_token(USERNAME, scope, client_id=SPOTIPY_CLIENT_ID,
 
 def get_all_playlists(poffset=0):
     playlistRequest = sp.current_user_playlists(limit=50, offset=poffset)
-    playlists = []
+    playlists = {}
 
     while not len(playlistRequest['items']) == 0:
         # get the next 50
         playlistRequest = sp.current_user_playlists(limit=50, offset=poffset)
-        # for song saved
         for playlist in playlistRequest['items']:
 
-            playlistName = playlist['name']
-            playlists.append(playlistName)
-            print('got playlist: ' + playlistName)
+            playlists.update({playlist['name']: playlist['uri']})
 
         if len(playlistRequest['items']) < 50:
             return playlists
         else:
             poffset += 50
-    
+
 # make sure we auth'd
 if token:  
     sp = spotipy.Spotify(auth=token)
 
     # get all playlists
     playlists = get_all_playlists()
-    print(playlists)
 
     # get all saved
     offset = 0
@@ -50,18 +43,28 @@ if token:
 
         # for song saved
         for item in saved['items']:
+
+            # only tracks not albums
+            track = item['track']
+            if track['type'] is not 'track':
+                pass
+
             date = item['added_at']
             
             date = datetime.strptime(date, '%Y-%m-%dT%H:%M:%SZ')
-            date_string = date.strftime('%B `%y')
+            date_string = date.strftime('%B \'%y')
             # date_string example: November `19
 
+            if date_string not in playlists.keys():
+                # oh no dont we have the playlist already
+                sp.user_playlist_create(USERNAME, str(date_string), public=False)
+                playlists = get_all_playlists()
+            
+            playlist_uri = playlists[(date_string)]
 
-            track = item['track']
-            print(track['name'] + ' - ' + track['artists'][0]['name'])
-            # now we have to check if the playlist exists
-            offset = 0
-            sp.current_user_playlists(limit=50, offset=offset)
+            # just add
+            sp.user_playlist_add_tracks(USERNAME, playlist_uri, [track['id']])
+            print('adding ' + track['name'] + ' - ' + track['artists'][0]['name'] + 'to ' + str(date_string))
 
         # check if weve gone through all the songs
         if len(saved['items']) < 50:
@@ -71,5 +74,3 @@ if token:
 
 else:
     print("Can't get token for", USERNAME)
-
-db.dump()
