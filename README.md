@@ -1,12 +1,5 @@
 # ![img](https://i.imgur.com/asrfVaW.png)
-<table>
-<tr>
-<td>
-  A python script to orginize all your saved songs into monthly playlists
-</td>
-</tr>
-</table>
-
+A python script to orginize all your saved songs into monthly playlists
 
 ## Demo
 Here is an awful recording of the script working for the first time, and me being excited about it: ![shakey and downsized video](https://imgur.com/PGiEpyg)
