@@ -8,9 +8,7 @@ Here is an awful recording of the script working for the first time, and me bein
 ![img](https://github.com/djmango/spotify-monthly-playlists/blob/master/img/spotify-monthly-diag.png)
 
 ## Support
-The WebApp is compatible with devices of all sizes and all OS's, and consistent improvements are being made.
-
-![](https://iharsh234.github.io/WebApp/images/demo/mobile.png)
+If you can run python3 and make HTTP requests, you should be good.
 
 ## Usage
 Make a spotify app and use those credentials in keys.py (keys.example.py shows format). I'll actually write something here in the future.
