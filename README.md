@@ -2,7 +2,7 @@
 A python script to orginize all your saved songs into monthly playlists
 
 ## Demo
-Here is an awful recording of the script working for the first time, and me being excited about it: ![shakey and downsized video](https://youtu.be/BIJhtVM27Lk)
+Here is an awful recording of the script working for the first time, and me being excited about it: shakey and downsized video https://youtu.be/BIJhtVM27Lk
 
 ## Theory
 ![img](https://github.com/djmango/spotify-monthly-playlists/blob/master/img/spotify-monthly-diag.png)
